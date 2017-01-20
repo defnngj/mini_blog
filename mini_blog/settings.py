@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import tempfile
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -121,12 +124,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(tempfile.gettempdir(), 'ck_static')
+MEDIA_ROOT = os.path.join(tempfile.gettempdir(), 'ck_media')
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = '//cdn.bootcss.com/jquery/2.1.1/jquery.min.js'
+
+# 设置user model
+AUTH_USER_MODEL = "blog.User"
 
 # log配置
 LOG_FILE = "./all.log"
@@ -225,3 +237,4 @@ EMAIL_SUBJECT_PREFIX = u'blog'          # 为邮件Subject-line前缀,默认是'
 EMAIL_USE_TLS = True                    # 与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+

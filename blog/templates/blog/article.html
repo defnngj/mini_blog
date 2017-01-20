@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 
 {% block main %}
-<div class="row">
+<div class="row" style="border-top-width: 1px; margin-top: 50px;">
     <div id="vmaig-content" class="col-md-8 col-lg-9">
         <div id="article-page" class="well">
             <ol class="breadcrumb">
@@ -38,7 +38,7 @@
         </div>
 
         <!--评论框 -->
-		{% include "./vmaig_comments/vmaig_comments.html"%}
+		{% include "./comments/blog_comments.html"%}
 
     </div>
 
