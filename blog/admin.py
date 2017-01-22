@@ -1,13 +1,11 @@
 # coding:utf-8
 from django.contrib import admin
-from blog.models import Article,Category,Carousel,Nav,Column
+from blog.models import Article,Category,Nav,Column
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from blog.models import User as BlogUser
 from blog.forms import BlogUserCreationForm
 from blog.models import Comment
-
-
 
 
 # Register your models here.
@@ -53,13 +51,6 @@ class ColumnAdmin(admin.ModelAdmin):
     filter_horizontal = ('article',)
 
 
-class CarouselAdmin(admin.ModelAdmin):
-    search_fields = ('title',)
-    list_display = ('title','article','img','create_time')
-    list_filter = ('create_time',)
-    fields = ('title','article','img','summary')
-
-
 class BlogUserAdmin(UserAdmin):
     add_form = BlogUserCreationForm
     add_fieldsets = (
@@ -86,7 +77,6 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Nav, NavAdmin)
 admin.site.register(Column, ColumnAdmin)
-admin.site.register(Carousel, CarouselAdmin)
 admin.site.unregister(Group)
 admin.site.register(BlogUser, BlogUserAdmin)
 admin.site.register(Comment,CommentAdmin)

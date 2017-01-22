@@ -40,8 +40,8 @@ class CommentControl(View):
         # 保存评论
         comment = Comment.objects.create(
                 user=user,
-                article = article,
-                comment = comment,
+                article=article,
+                comment=comment,
                 )
 
         try:

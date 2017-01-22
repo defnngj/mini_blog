@@ -11,8 +11,8 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import auth
 from django.contrib.auth.forms import PasswordChangeForm,SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
-from blog.models import Article,Category,Carousel,Column,Nav
-#from vmaig_comments.models import Comment
+from blog.models import Article,Category,Column,Nav
+from blog.models import Comment
 from mini_blog.settings import PAGE_NUM
 import datetime,time
 import json
@@ -39,7 +39,7 @@ class BaseMixin(object):
             # 导航条
             context['nav_list'] = Nav.objects.filter(status=0)
             # 最新评论
-            #context['latest_comment_list'] = Comment.objects.order_by("-create_time")[0:10]
+            context['latest_comment_list'] = Comment.objects.order_by("-create_time")[0:10]
 
         except Exception as e:
             logger.error(u'[BaseMixin]加载基本信息出错')
@@ -51,11 +51,6 @@ class IndexView(BaseMixin,ListView):
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
     paginate_by = PAGE_NUM  # 分页--每页的数目
-
-    def get_context_data(self,**kwargs):
-        # 轮播
-        kwargs['carousel_page_list'] = Carousel.objects.all()
-        return super(IndexView,self).get_context_data(**kwargs)
 
     def get_queryset(self):
         article_list = Article.objects.filter(status=0)

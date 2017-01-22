@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 
+
 # 用来修改admin中显示的app名称,因为admin app 名称是用 str.title()显示的,所以修改str类的title方法就可以实现.
 class string_with_title(str):
     def __new__(cls, value, title):
@@ -113,26 +114,13 @@ class Column(models.Model):
         return self.name
 
 
-# 轮播管理
-class Carousel(models.Model):
-    title = models.CharField(max_length=100, verbose_name=u'标题')
-    summary = models.TextField(blank=True, null=True, verbose_name=u'摘要')
-    img = models.CharField(max_length=200, verbose_name=u'轮播图片', default='/static/img/carousel/default.jpg')
-    article = models.ForeignKey(Article, verbose_name=u'文章')
-    create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = verbose_name = u'轮播'
-        ordering = ['-create_time']
-        app_label = string_with_title('blog', u"博客管理")
-
-
 # 用户管理
 class User(AbstractUser):
     img = models.CharField(max_length=200, default='/static/tx/default.jpg', verbose_name=u'头像地址')
     intro = models.CharField(max_length=200, blank=True, null=True, verbose_name=u'简介')
 
     class Meta(AbstractUser.Meta):
+        verbose_name_plural = verbose_name = u'用户'
         app_label = string_with_title('blog', u"用户管理")
 
 

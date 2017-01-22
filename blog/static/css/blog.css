@@ -4,7 +4,7 @@ body {
     font-family:"Microsoft YaHei","WenQuanYi Micro Hei","tohoma,sans-serif";
     color:#6B6B6B;
     font-size:12px;
-    background:url('../img/background.jpg') repeat scroll 0% 0% transparent;
+    background:url('../img/bg.jpg') repeat scroll 0% 0% transparent;
 }
 
 header {
@@ -17,12 +17,12 @@ body,html {
     padding: 0;
     height:100%;
 }
-#vmaig-main {
+#blog-main {
     position: relative;
     min-height:100%;
     _height:100%; /* for ie6 因为ie6不支持min-height */
 }
-#vmaig-content {
+#blog-content {
     padding: 10px;
     padding-bottom: 30px;  /* 不至被footer盖住 */
 }
@@ -58,7 +58,7 @@ a:hover{
     padding-top:50px;
 }
 
-#vmaig-main{
+#blog-main{
     padding:30px 0px;
 }
 
@@ -280,6 +280,8 @@ footer {
     margin-bottom:30px;
     padding-bottom:20px;
     display:block;
+	border-top-width: 52px;
+	margin-top: 20px;
 }
 
 .home-post .post-title{

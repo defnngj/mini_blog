@@ -1,12 +1,8 @@
-<div id="vmaig-latest-comments">
-    <div class="panel panel-vmaig-comments">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <span class="glyphicon glyphicon-comment"></span>
-                最新评论
-                <span class="glyphicon glyphicon-remove btn panel-close pull-right" data-dismiss="alert"></span>
-                <span class="glyphicon glyphicon-chevron-up btn panel-collapse pull-right"  data-toggle="collapse" data-target="#latest-comment-list"></span>
-            </h3>
+<div class="row">
+    <div class="col-sm-4" style="width:295px">
+    <div class="panel panel-success">
+        <div class="panel-heading" style="width:263px">
+            <h3 class="panel-title">最新评论</h3>
         </div>
         <ul id="latest-comment-list" class="list-group collapse in">
             {% for comment in latest_comment_list%}
@@ -36,5 +32,6 @@
             </li>
             {% endfor %}
         </ul>
-    </div>     
+    </div>
+	</div>	
 </div>
