@@ -3,13 +3,13 @@
 {%block main%}
 <div class="row">
     <div id="blog-content" class="col-md-8 col-lg-9">
-        <div class="well">
+        <div class="well-sm">
             {% autoescape off%}
             {{ column.summary}}
             {% endautoescape %}
         </div>
 
-        <div class="well">
+        <div class="well-sm">
 
             {% if article_list %}
             {% with post_list=article_list %}
