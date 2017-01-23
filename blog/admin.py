@@ -1,11 +1,11 @@
 # coding:utf-8
 from django.contrib import admin
-from blog.models import Article,Category,Nav,Column
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from blog.models import User as BlogUser
 from blog.forms import BlogUserCreationForm
-from blog.models import Comment
+from blog.models import Article, Category, Nav, Column
+from blog.models import Comment, About
 
 
 # Register your models here.
@@ -69,8 +69,12 @@ class BlogUserAdmin(UserAdmin):
 class CommentAdmin(admin.ModelAdmin):
     search_fields = ('user__username','article__title','comment')
     list_filter = ('create_time',)
-    list_display = ('user','article','create_time')
-    fields = ('user','article','comment')
+    list_display = ('user', 'article', 'create_time')
+    fields = ('user', 'article', 'comment')
+
+
+class AboutAdmin(admin.ModelAdmin):
+    list_display = ('title', 'status', 'create_time')
 
 
 admin.site.register(Category, CategoryAdmin)
@@ -79,5 +83,5 @@ admin.site.register(Nav, NavAdmin)
 admin.site.register(Column, ColumnAdmin)
 admin.site.unregister(Group)
 admin.site.register(BlogUser, BlogUserAdmin)
-admin.site.register(Comment,CommentAdmin)
-
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(About, AboutAdmin)

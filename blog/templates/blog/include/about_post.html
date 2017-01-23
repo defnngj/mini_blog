@@ -1,0 +1,23 @@
+<div class="row" style="border-top-width: 1px; margin-top: 50px;">
+    <div id="blog-content" class="col-md-8 col-lg-9">
+        <div id="article-page" class="well-sm">
+            <ol class="breadcrumb">
+                <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="hidden-xs"><a><span class="glyphicon glyphicon-calendar"></span> {{post.create_time|date:"Y-m-d"}}</a></li>
+            </ol>
+
+            <div id="article">
+                <div class="article-title">
+                    <h1>{{post.title}}</h1>
+                </div>
+                <hr/>
+                <div class="article-content">
+                    {% autoescape off%}
+                    {{ post.body }}
+                    {% endautoescape %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

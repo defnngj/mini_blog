@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
             </button>
 			<a href="/">
-				<div class="navbar-brand">测试酒馆</div>
+				<div class="navbar-brand">测试客栈</div>
 			</a>
         </div>
         <div class="collapse navbar-collapse" id="vmaig-navbar-collapse">
@@ -20,10 +20,10 @@
                     全部文章
                 </a>
                 </li>
-				<li>
-				<a href="http://fnng.cnblogs.com">
-                    <span class="glyphicon glyphicon-globe"></span>
-                    博客园
+                <li>
+				<a href="/about">
+                    <span class="glyphicon glyphicon-user"></span>
+                    关于这里
                 </a>
                 </li>
                 
@@ -31,11 +31,17 @@
                 {% for nav in nav_list%}
                 <li>
                     <a href="{{nav.url}}">
+                        <span class="glyphicon glyphicon-link"></span>
                         {{nav.name}}
                     </a>
                 </li>
                 {% endfor%}
                 {% endif%}
+                <li>
+                    <form class="navbar-form navbar-right" method="get" action="/search/">
+                        <input id="s" name="s" type="text" class="form-control" placeholder="Search...">
+                    </form>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if not user.is_authenticated %}

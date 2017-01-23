@@ -206,7 +206,7 @@ class UserControl(View):
         imgData = base64.b64decode(data)
 
         filename ="tx_100x100_"+'%d' % request.user.id+".jpg"
-        filedir = "auth/static/tx/"
+        filedir = "blog/static/tx/"
         if not os.path.exists(filedir):
             os.makedirs(filedir)
 
@@ -249,17 +249,18 @@ class UserControl(View):
             # 验证上传是否错误
             if ret['key'] != key or ret['hash'] != qiniu.etag(localfile):
                 logger.error(u'[UserControl]上传头像错误：[%s]' % request.user.username)
-                return HttpResponse(u"上传头像错误",status=500)
+                return HttpResponse(u"上传头像错误", status=500)
 
-            return HttpResponse(u"上传头像成功!\n(注意有10分钟缓存)")
+            return HttpResponse(u"上传头像成功1!\n(注意有10分钟缓存)")
 
         except Exception as e:
+            print(filename)
             request.user.img = "/static/tx/"+filename
             request.user.save()
 
             # 验证上传是否错误
             if not os.path.exists(path):
-                logger.error(u'[UserControl]用户上传头像出错:[%s]',request.user.username)
-                return HttpResponse(u"上传头像错误",status=500)
+                logger.error(u'[UserControl]用户上传头像出错:[%s]', request.user.username)
+                return HttpResponse(u"上传头像错误", status=500)
 
-            return HttpResponse(u"上传头像成功!\n(注意有10分钟缓存)")
+            return HttpResponse(u"上传头像成功2!\n(注意有10分钟缓存)"+filename)

@@ -126,12 +126,24 @@ class User(AbstractUser):
 
 # 评论管理
 class Comment(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=u'用户')
-    article = models.ForeignKey(Article,verbose_name=u'文章')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'用户')
+    article = models.ForeignKey(Article, verbose_name=u'文章')
     comment = models.TextField(verbose_name=u'评论内容')
-    create_time = models.DateTimeField(u'创建时间',auto_now_add=True)
+    create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
 
     class Meta:
         verbose_name_plural = verbose_name = u'评论'
         ordering = ['-create_time']
+        app_label = string_with_title('blog', u"评论管理")
+
+
+# 关于这里
+class About(models.Model):
+    title = models.CharField(max_length=150, verbose_name=u'标题')
+    body = RichTextField(verbose_name=u'正文')
+    status = models.IntegerField(default=0, choices=STATUS.items(), verbose_name='状态')
+    create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = verbose_name = u'关于这里'
         app_label = string_with_title('blog', u"评论管理")

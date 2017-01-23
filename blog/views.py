@@ -1,4 +1,4 @@
-from django.shortcuts import render
+# coding=utf-8
 from django import template
 from django import forms
 from django.http import HttpResponse,Http404
@@ -12,21 +12,22 @@ from django.contrib import auth
 from django.contrib.auth.forms import PasswordChangeForm,SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
 from blog.models import Article,Category,Column,Nav
-from blog.models import Comment
+from blog.models import Comment, About
 from mini_blog.settings import PAGE_NUM
 import datetime,time
 import json
 import logging
 
 
-#缓存
+# 缓存
 try:
     cache = caches['memcache']
 except ImportError as e:
     cache = caches['default']
 
-#logger
+# logger
 logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 class BaseMixin(object):
@@ -47,7 +48,7 @@ class BaseMixin(object):
         return context
 
 
-class IndexView(BaseMixin,ListView):
+class IndexView(BaseMixin, ListView):
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
     paginate_by = PAGE_NUM  # 分页--每页的数目
@@ -57,14 +58,14 @@ class IndexView(BaseMixin,ListView):
         return article_list
 
 
-class ArticleView(BaseMixin,DetailView):
+class ArticleView(BaseMixin, DetailView):
     queryset = Article.objects.filter(status=0)
     template_name = 'blog/article.html'
     context_object_name = 'article'
     slug_field = 'en_title'
 
     def get(self,request,*args,**kwargs):
-        #统计文章的访问访问次数
+        # 统计文章的访问访问次数
         if 'HTTP_X_FORWARDED_FOR' in request.META:
             ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
@@ -72,10 +73,10 @@ class ArticleView(BaseMixin,DetailView):
         self.cur_user_ip = ip
 
         en_title = self.kwargs.get('slug')
-        #获取15*60s时间内访问过这篇文章的所有ip
+        # 获取15*60s时间内访问过这篇文章的所有ip
         visited_ips = cache.get(en_title,[])
 
-        #如果ip不存在就把文章的浏览次数+1
+        # 如果ip不存在就把文章的浏览次数+1
         if ip not in visited_ips:
             try:
                 article = self.queryset.get(en_title=en_title)
@@ -87,20 +88,19 @@ class ArticleView(BaseMixin,DetailView):
                 article.save()
                 visited_ips.append(ip)
 
-            #更新缓存
-            cache.set(en_title,visited_ips,15*60)
+            # 更新缓存
+            cache.set(en_title, visited_ips, 15*60)
 
-        return super(ArticleView,self).get(request,*args,**kwargs)
+        return super(ArticleView, self).get(request, *args, **kwargs)
 
-
-    def get_context_data(self,**kwargs):
-        #评论
-        en_title = self.kwargs.get('slug','')
+    def get_context_data(self, **kwargs):
+        # 评论
+        en_title = self.kwargs.get('slug', '')
         kwargs['comment_list'] = self.queryset.get(en_title=en_title).comment_set.all()
-        return super(ArticleView,self).get_context_data(**kwargs)
+        return super(ArticleView, self).get_context_data(**kwargs)
 
 
-class AllView(BaseMixin,ListView):
+class AllView(BaseMixin, ListView):
     template_name = 'blog/all.html'
     context_object_name = 'article_list'
 
@@ -144,7 +144,7 @@ class AllView(BaseMixin,ListView):
 
         html = ""
         for article in article_list:
-            html +=  template.loader.get_template('blog/include/all_post.html').render(template.Context({'post':article}))
+            html += template.loader.get_template('blog/include/all_post.html').render(template.Context({'post':article}))
 
         mydict = {"html":html,"isend":isend}
         return HttpResponse(json.dumps(mydict),content_type="application/json")
@@ -160,9 +160,9 @@ class SearchView(BaseMixin,ListView):
         return super(SearchView,self).get_context_data(**kwargs)
 
     def get_queryset(self):
-        #获取搜索的关键字
+        # 获取搜索的关键字
         s = self.request.GET.get('s','')
-        #在文章的标题,summary和tags中搜索关键字
+        # 在文章的标题,summary和tags中搜索关键字
         article_list = Article.objects.only('title','summary','tags')\
                 .filter(Q(title__icontains=s)|Q(summary__icontains=s)|Q(tags__icontains=s)\
                 ,status=0);
@@ -197,10 +197,10 @@ class CategoryView(BaseMixin,ListView):
         return article_list
 
 
-class UserView(BaseMixin,TemplateView):
+class UserView(BaseMixin, TemplateView):
     template_name = 'blog/user.html'
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
 
         if not request.user.is_authenticated():
             logger.error(u'[UserView]用户未登陆')
@@ -225,24 +225,24 @@ class UserView(BaseMixin,TemplateView):
         raise Http404
 
 
-class ColumnView(BaseMixin,ListView):
+class ColumnView(BaseMixin, ListView):
     queryset = Column.objects.all()
     template_name = 'blog/column.html'
     context_object_name = 'article_list'
     paginate_by = PAGE_NUM
 
-    def get_context_data(self,**kwargs):
-        column = self.kwargs.get('column','')
+    def get_context_data(self, **kwargs):
+        column = self.kwargs.get('column', '')
         try:
             kwargs['column'] = Column.objects.get(name=column)
         except Column.DoesNotExist:
             logger.error(u'[ColumnView]访问专栏不存在: [%s]' % column)
             raise Http404
 
-        return super(ColumnView,self).get_context_data(**kwargs)
+        return super(ColumnView, self).get_context_data(**kwargs)
 
     def get_queryset(self):
-        column = self.kwargs.get('column','')
+        column = self.kwargs.get('column', '')
         try:
             article_list = Column.objects.get(name=column).article.all()
         except Column.DoesNotExist:
@@ -250,3 +250,20 @@ class ColumnView(BaseMixin,ListView):
             raise Http404
 
         return article_list
+
+
+# 关于这里
+def about(request):
+    about_list = About.objects.filter(status=0)
+    return render(request, "/blog/about.html", {'about_list': about_list})
+
+
+class AboutView(BaseMixin, ListView):
+    template_name = 'blog/about.html'
+    context_object_name = 'about_list'
+    paginate_by = PAGE_NUM  # 分页--每页的数目
+
+    def get_queryset(self):
+        article_list = About.objects.filter(status=0)
+        return article_list
+
